@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 
-export function useTicktimer(initialValue = 0) {
+export function useTicktimer(initStamps = [], initialValue = 0) {
 
     const [count, setCount] = useState(initialValue);
     const [running, setRunning] = useState(false);
-    const [stamps, setStamps] = useState([])
+    const [stamps, setStamps] = useState(initStamps)
 
     useEffect(() => {
         let id = 0

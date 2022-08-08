@@ -1,9 +1,8 @@
-import { useState } from 'react'
 import './App.css'
-import Container from './components/Container'
+import ChronosList from './components/ChronosList'
+
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <div className="App">
@@ -11,7 +10,7 @@ function App() {
         <h1>Ract Chronometer</h1>
       </header>
       <main>
-        <Container></Container>
+        <ChronosList></ChronosList>
       </main>
     </div>
   )
