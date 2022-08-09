@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import Chronograph from './Chronograph'
+import dbConf from '../firebase/firebaseConf'
+import { useFirebase } from '../hooks/useFirebase'
 
 const Box = ({ id, title, eHandler }) => {
     return (
@@ -13,6 +15,7 @@ const Box = ({ id, title, eHandler }) => {
 const ChronosList = () => {
     const [chronoList, setChronoList] = useState([])
     const [id, setId] = useState(0)
+    const [get, create, update, del] = useFirebase(dbConf)
 
     const addList = (e) => {
         e.preventDefault();
@@ -23,13 +26,16 @@ const ChronosList = () => {
         } else {
             console.log('Asigne un nombre al cronometro')
         }
-
     }
 
     const remove = (id) => {
         console.log(id)
         const tmpList = chronoList.filter(element => id !== element.id);
         setChronoList(tmpList);
+    }
+
+    function loadData(colName) {
+        const items = get('timers').then(el => console.log(el))
     }
 
     return (
@@ -53,6 +59,11 @@ const ChronosList = () => {
             </form>
 
             {chronoList.map(c => <Box key={c.id} id={c.id} title={c.title} eHandler={remove} />)}
+
+            <div>
+                <button onClick={() => loadData()}>Cargar cronos</button>
+                {chronoList.length > 0 && <button  >Guardar cronos</button>}
+            </div>
 
         </div>
     )

@@ -1,11 +1,11 @@
 import { useState } from "react"
 import { collection, getDocs, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 
-export function useFirebase(dbconf, collectionName) {
+export function useFirebase(dbconf) {
 
   const [data, setData] = useState([])
 
-  async function saveData(obj) {
+  async function saveData(collectionName, obj) {
     try {
       const docRef = await addDoc(collection(dbconf, collectionName), obj)
 
@@ -17,7 +17,7 @@ export function useFirebase(dbconf, collectionName) {
     }
   }
 
-  async function updateData(id, obj) {
+  async function updateData(collectionName, id, obj) {
     try {
       const docRef = doc(dbconf, collectionName);
       await updateDoc(docRef, obj);
@@ -27,7 +27,7 @@ export function useFirebase(dbconf, collectionName) {
     }
   }
 
-  async function deleteData(id) {
+  async function deleteData(collectionName, id) {
     try {
 
       await deleteDoc(doc(dbconf, collectionName, id));
@@ -43,7 +43,7 @@ export function useFirebase(dbconf, collectionName) {
     querySnapshot.forEach(doc =>
       arr.push({id: doc.id, data: doc.data()})
     )
-    console.log(arr)
+    return arr
   }
 
   return [getAllDocs, saveData, updateData, deleteData]
