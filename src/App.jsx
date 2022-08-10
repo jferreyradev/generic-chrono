@@ -1,6 +1,4 @@
-import './App.css'
 import ChronosList from './components/ChronosList'
-
 
 function App() {
 

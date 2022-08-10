@@ -3,14 +3,6 @@ import Chronograph from './Chronograph'
 import dbConf from '../firebase/firebaseConf'
 import { useFirebase } from '../hooks/useFirebase'
 
-const Box = ({ id, title, eHandler, saveHandler, deleteHandler }) => {
-    return (
-        <div>
-            <Chronograph title={title} createDate={new Date()} cbSave={saveHandler} cbDel={deleteHandler} id={id} ></Chronograph>
-            <button onClick={() => eHandler(id)}>Eliminar</button>
-        </div>
-    )
-}
 
 const ChronosList = () => {
     const [chronoList, setChronoList] = useState([])
