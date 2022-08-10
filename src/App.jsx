@@ -22,6 +22,20 @@ const Description = ()=>{
   )
 }
 
+const PersonalLinks = ()=>{
+  return (
+    <div>
+      <div>
+      <a href="https://github.com/jferreyradev/generic-chrono/"> Te invito a ver el código del proyecto en github</a>
+      </div>
+      <div>
+      <a href="mailto:joserferreyra@gmail.com">Envíame un correo.</a>
+      </div>    
+      
+    </div>
+  )
+}
+
 function App() {
 
   return (
@@ -32,6 +46,9 @@ function App() {
       <main>
         <ChronosList></ChronosList>
       </main>
+      <footer>
+        <PersonalLinks />
+      </footer>
     </div>
   )
 }
