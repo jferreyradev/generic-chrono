@@ -3,10 +3,10 @@ import Chronograph from './Chronograph'
 import dbConf from '../firebase/firebaseConf'
 import { useFirebase } from '../hooks/useFirebase'
 
-const Box = ({ id, title, eHandler }) => {
+const Box = ({ id, title, eHandler, saveHandler, deleteHandler }) => {
     return (
         <div>
-            <Chronograph title={title} createDate={new Date()} ></Chronograph>
+            <Chronograph title={title} createDate={new Date()} cbSave={saveHandler} cbDel={deleteHandler} id={id} ></Chronograph>
             <button onClick={() => eHandler(id)}>Eliminar</button>
         </div>
     )
@@ -15,13 +15,13 @@ const Box = ({ id, title, eHandler }) => {
 const ChronosList = () => {
     const [chronoList, setChronoList] = useState([])
     const [id, setId] = useState(0)
-    const [get, create, update, del] = useFirebase(dbConf)
+    const [get, save, update, del] = useFirebase(dbConf)
 
     const addList = (e) => {
         e.preventDefault();
         if (e.target["inputText"].value) {
             setId(id + 1)
-            const c = { id: id, title: e.target["inputText"].value }
+            const c = { id: null, data: { title: e.target["inputText"].value } }
             setChronoList([...chronoList, c])
         } else {
             console.log('Asigne un nombre al cronometro')
@@ -34,8 +34,23 @@ const ChronosList = () => {
         setChronoList(tmpList);
     }
 
-    function loadData(colName) {
-        const items = get('timers').then(el => console.log(el))
+    async function loadData(colName) {
+        const items = await get('timers') //.then(el => console.log(el,id))
+        console.log(items)
+        if (items.length > 0) {
+            setChronoList(items)
+            items.map((el, i) => console.log(i, el.id, el.data.stamps))
+        }
+    }
+
+    function saveData(obj) {
+        save('timers', obj)
+        console.log(obj)
+    }
+
+    function delData(id) {
+        del('timers', id)
+        remove(id)
     }
 
     return (
@@ -58,12 +73,16 @@ const ChronosList = () => {
                 </button>
             </form>
 
-            {chronoList.map(c => <Box key={c.id} id={c.id} title={c.title} eHandler={remove} />)}
+            {chronoList.map((c, i) =>
+                <Chronograph key={i} title={c.data.title} createDate={new Date()}
+                    cbSave={saveData} cbDel={delData} id={c.id}
+                    initStamps={c.data === undefined ? [] : c.data.stamps} >
+                </Chronograph>
+            )}
 
-            <div>
+            {chronoList.length === 0 && <div>
                 <button onClick={() => loadData()}>Cargar cronos</button>
-                {chronoList.length > 0 && <button  >Guardar cronos</button>}
-            </div>
+            </div>}
 
         </div>
     )

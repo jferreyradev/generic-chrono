@@ -10,8 +10,8 @@ const Display = ({ time }) => {
     )
 }
 
-function Chronograph({ title, initStamps = null }) {
-    const [running, stamps, methods, time] = useTicktimer()
+function Chronograph({id, title, initStamps = null, cbSave=null, cbDel=null }) {
+    const [running, stamps, methods, time] = useTicktimer(initStamps)
 
     return (
         <div>
@@ -26,7 +26,7 @@ function Chronograph({ title, initStamps = null }) {
                 <button onClick={() => methods.reset()}>Reset</button>
                 <button onClick={() => methods.stamp()}>Stamp</button>
             </div>
-            <div>
+            <div >
                 {
                     stamps && stamps.map((t, i) => {
                         return (
@@ -34,6 +34,10 @@ function Chronograph({ title, initStamps = null }) {
                         )
                     })
                 }
+            </div>
+            <div>
+                { cbSave && <button onClick={()=>cbSave({title, stamps})}>Guardar</button> }
+                { cbDel && <button onClick={()=>cbDel(id)}>Eliminar</button> }
             </div>
         </div>
     )

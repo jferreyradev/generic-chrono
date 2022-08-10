@@ -1,16 +1,16 @@
-import { useState } from "react"
-import { collection, getDocs, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, setDoc } from 'firebase/firestore';
 
 export function useFirebase(dbconf) {
 
-  const [data, setData] = useState([])
-
-  async function saveData(collectionName, obj) {
+  async function saveData(collectionName, obj, id=null) {
     try {
-      const docRef = await addDoc(collection(dbconf, collectionName), obj)
-
-      //obtenerDatos()
-
+      let docRef
+      if (id==null) {
+        docRef = await addDoc(collection(dbconf, collectionName), obj)
+      }else{
+        docRef = doc(dbconf, collectionName, id);
+        setDoc(docRef, obj, { merge: true });
+      }
       console.log("Document written with ID: ", docRef.id);
     } catch (e) {
       console.error("Error adding document: ", e);
@@ -30,8 +30,9 @@ export function useFirebase(dbconf) {
   async function deleteData(collectionName, id) {
     try {
 
+      console.log(id)
       await deleteDoc(doc(dbconf, collectionName, id));
-      console.log("Document deleting with ID: ", docRef.id);
+      console.log("Document deleting with ID: ", id);
     } catch (e) {
       console.error("Error adding document: ", e);
     }

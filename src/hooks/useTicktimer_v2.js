@@ -25,7 +25,14 @@ export function useTicktimer(initStamps = [], initialValue = 0) {
     const reset = (c = 0) => setCount(c)
 
     const stamp = () => {
-        if (running) setStamps([...stamps, time()])
+        if (running){
+            if (stamps){
+                setStamps([...stamps, time()])
+            }else{
+                setStamps([time()])
+            }
+
+        } 
     }   
 
     const hours = (t) => Math.floor(t / 36000)
